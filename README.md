@@ -1,1 +1,1 @@
-# IOT-ESP8266-Alexa_Automation_4Way_Switch
+# IOT-NodeMcu-Alexa_Automation_4Way_Switch
