@@ -10,6 +10,8 @@ boolean connectUDP();
 void startHttpServer();
 void turnOnRelay();
 void turnOffRelay();
+void sendRelayState();
+bool switchStatus;
 /*********************************/
 /*********************************/
 // Code is tested with ESP8266 ESP-12E or NodeMcu
@@ -185,15 +187,25 @@ void startHttpServer() {
        //switchSource = "alexa";
       String request = HTTP.arg(0);      
  
+ if(request.indexOf("SetBinaryState") >= 0) {
       if(request.indexOf("<BinaryState>1</BinaryState>") > 0) {
           Serial.println("Got Turn on request");
-          turnOnRelay();
+          switchStatus=1;
+          digitalWrite(relayPin, HIGH);
+          
       }
 
       if(request.indexOf("<BinaryState>0</BinaryState>") > 0) {
           Serial.println("Got Turn off request");
-          turnOffRelay();
+          switchStatus=0;
+           digitalWrite(relayPin, LOW);
       }
+ }
+
+  if(request.indexOf("GetBinaryState") >= 0) {
+    Serial.println("Got binary state request");
+    sendRelayState();
+  }
       
       HTTP.send(200, "text/plain", "");
     });
